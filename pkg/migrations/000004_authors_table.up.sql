@@ -1,0 +1,12 @@
+INSERT INTO authors (name, birth_date, biography)
+VALUES 
+    ('Harper Lee', '1926-04-28', 'Harper Lee was an American novelist widely known for To Kill a Mockingbird, published in 1960.'),
+    ('George Orwell', '1903-06-25', 'George Orwell was an English novelist, essayist, journalist, and critic. His work is characterised by lucid prose, biting social criticism, opposition to totalitarianism, and outspoken support of democratic socialism.'),
+    ('F. Scott Fitzgerald', '1896-09-24', 'Francis Scott Key Fitzgerald was an American novelist, essayist, screenwriter, and short-story writer. His works are the paradigmatic writings of the Jazz Age, a term he coined himself.'),
+    ('Jane Austen', '1775-12-16', 'Jane Austen was an English novelist known primarily for her six major novels, which interpret, critique and comment upon the British landed gentry at the end of the 18th century.'),
+    ('J.K. Rowling', '1965-07-31', 'Joanne Rowling, better known by her pen name J.K. Rowling, is a British author, philanthropist, film producer, television producer, and screenwriter. She is best known for writing the Harry Potter fantasy series, which has won multiple awards and sold more than 500 million copies, becoming the best-selling book series in history.'),
+    ('J. R. R. Tolkien', '1892-01-03', 'John Ronald Reuel Tolkien was an English writer, poet, philologist, and academic. He is best known as the author of the High Fantasy works The Hobbit and The Lord of the Rings.'),
+    ('Virginia Woolf', '1882-01-25', 'Adeline Virginia Woolf was an English writer, considered one of the most important modernist 20th-century authors and also a pioneer in the use of stream of consciousness as a narrative device.'),
+    ('Herman Melville', '1819-08-01', 'Herman Melville was an American novelist, short story writer, and poet of the American Renaissance period. Among his best-known works are Moby-Dick; Typee; a romanticized account of his experiences in Polynesia; and Billy Budd, Sailor, a posthumously published novella.'),
+    ('Charlotte Brontë', '1816-04-21', 'Charlotte Brontë was an English novelist and poet, the eldest of the three Brontë sisters who survived into adulthood and whose novels became classics of English literature.'),
+    ('J. D. Salinger', '1919-01-01', 'Jerome David Salinger was an American writer best known for his 1951 novel The Catcher in the Rye. Before its publication, Salinger published several short stories in Story magazine ienation, and as a critique on superficiality in society.');
