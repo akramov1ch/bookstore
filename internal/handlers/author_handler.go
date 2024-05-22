@@ -47,6 +47,27 @@ func GetAuthors(c *gin.Context) {
 	c.JSON(http.StatusOK, authors)
 }
 
+func GetAuthorsById(c *gin.Context) {
+	var author models.Author
+	authorid := c.Param("authorid")
+	var birthdate time.Time
+	err := DB.QueryRow("SELECT * FROM authors WHERE author_id = $1", authorid).Scan(&author.AuthorID, &author.Name, &birthdate, &author.Biography, &author.CreatedAt, &author.UpdatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Author not found!"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	author.BirthDate, err = services.ParseDateStr(birthdate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, author)
+}
+
 func CreateAuthor(c *gin.Context) {
 	var newAuthor models.Author
 	if err := c.ShouldBindJSON(&newAuthor); err != nil {

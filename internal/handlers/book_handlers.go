@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"net/http"
 	"time"
 
@@ -38,7 +39,28 @@ func GetBooks(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	c.JSON(http.StatusOK, books)
+}
 
+func GetBooksById(c *gin.Context) {
+	var book models.Book
+	var publicationDate time.Time
+	bookid := c.Param("bookid")
+	err := DB.QueryRow("SELECT * FROM books WHERE book_id = $1", bookid).Scan(&book.BookID, &book.Title, &book.AuthorID, &publicationDate, &book.ISBN, &book.Description, &book.CreatedAt, &book.UpdatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found!"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	book.PublicationDate, err = services.ParseDateStr(publicationDate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, book)
 }
 
 func CreateBook(c *gin.Context) {
