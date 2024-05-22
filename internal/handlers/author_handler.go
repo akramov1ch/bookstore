@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -91,14 +92,15 @@ func CreateAuthor(c *gin.Context) {
 }
 
 func UpdateAuthor(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("authorid")
+	fmt.Println(id)
 	var updatedAuthor models.Author
 	if err := c.ShouldBindJSON(&updatedAuthor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	var author models.Author
-	_, err := DB.Query("SELECT * FROM authors WHERE author_id = $1", id)
+	err := DB.QueryRow("SELECT * FROM authors WHERE author_id = $1", id).Scan(&author.AuthorID, &author.Name, &author.BirthDate, &author.Biography, &author.CreatedAt, &author.UpdatedAt)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "author not found"})
 		return
@@ -120,7 +122,7 @@ func UpdateAuthor(c *gin.Context) {
 }
 
 func DeleteAuthor(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("authorid")
 	var author models.Author
 	err := DB.QueryRow("SELECT * FROM authors WHERE author_id = $1", id).Scan(&author.AuthorID, &author.Name, &author.BirthDate, &author.Biography, &author.CreatedAt, &author.UpdatedAt)
 	if err != nil {

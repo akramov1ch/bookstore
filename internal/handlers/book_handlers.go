@@ -81,7 +81,15 @@ func CreateBook(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	_, err = DB.Exec("INSERT INTO books (book_id, title, author_id, publication_date, isbn, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", newBook.BookID, newBook.Title, newBook.AuthorID, publicationDate, newBook.ISBN, newBook.Description, newBook.CreatedAt, newBook.UpdatedAt)
+	var bookID int
+	err = DB.QueryRow("SELECT book_id FROM books ORDER BY book_id DESC LIMIT 1").Scan(&bookID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	err = DB.QueryRow("INSERT INTO books (book_id, title, author_id, publication_date, isbn, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", 
+	bookID + 1, newBook.Title, newBook.AuthorID, publicationDate, newBook.ISBN, newBook.Description, newBook.CreatedAt, newBook.UpdatedAt).
+	Scan(&newBook.BookID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -90,7 +98,7 @@ func CreateBook(c *gin.Context) {
 }
 
 func UpdateBook(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("bookid")
 	var updatedBook models.Book
 	if err := c.ShouldBindJSON(&updatedBook); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -121,7 +129,7 @@ func UpdateBook(c *gin.Context) {
 }
 
 func DeleteBook(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("bookid")
 	_, err := DB.Exec("DELETE FROM books WHERE book_id = $1", id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
