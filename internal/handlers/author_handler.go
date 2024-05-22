@@ -100,7 +100,18 @@ func UpdateAuthor(c *gin.Context) {
 
 func DeleteAuthor(c *gin.Context) {
 	id := c.Param("id")
-	_, err := DB.Exec("DELETE FROM authors WHERE author_id = $1", id)
+	var author models.Author
+	err := DB.QueryRow("SELECT * FROM authors WHERE author_id = $1", id).Scan(&author.AuthorID, &author.Name, &author.BirthDate, &author.Biography, &author.CreatedAt, &author.UpdatedAt)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "author not found"})
+		return
+	}
+	err = services.CheckAuthorsBook(author, &DB)
+	if err != nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "author has books"})
+		return
+	}
+	_, err = DB.Exec("DELETE FROM authors WHERE author_id = $1", id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

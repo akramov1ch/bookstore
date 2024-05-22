@@ -42,3 +42,15 @@ func CheckAutorId(authorid uuid.UUID, DB *sql.DB) (error) {
 	return nil
 }
 
+func CheckAuthorsBook(author models.Author, DB *sql.DB) (error) {
+	var book models.Book
+	query := "SELECT book_id, title, author_id, publication_date, isbn, description, created_at, updated_at FROM books WHERE author_id = $1"
+	err := DB.QueryRow(query, author.AuthorID).Scan(&book.BookID, &book.Title, &book.AuthorID, &book.PublicationDate, &book.ISBN, &book.Description, &book.CreatedAt, &book.UpdatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return err
+		}
+		return err
+	}
+	return nil
+}

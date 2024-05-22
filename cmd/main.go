@@ -7,30 +7,15 @@ import(
 
 func main(){
 	router := gin.Default()
-	router.GET("/authors", func(c *gin.Context){
-		handlers.GetAuthors(c)
-	})
-	router.POST("/authors", func(c *gin.Context){
-		handlers.CreateAuthor(c)
-	})
-	router.PUT("/authors/:authorid", func(c *gin.Context){
-		handlers.UpdateAuthor(c)
-	})
-	router.DELETE("/authors/:authorid", func(c *gin.Context){
-		handlers.DeleteAuthor(c)
-	})
-	router.GET("/books", func(c *gin.Context){
-		handlers.GetBooks(c)
-	})
-	router.POST("/books", func(c *gin.Context){
-		handlers.CreateBook(c)
-	})
-	router.PUT("/books/:bookid", func(c *gin.Context){
-		handlers.UpdateBook(c)
-	})
-	router.DELETE("/books/:bookid", func(c *gin.Context){
-		handlers.DeleteBook(c)
-	})
+	router.GET("/authors",handlers.GetAuthors)
+	router.POST("/authors", handlers.CreateAuthor)
+	router.PUT("/authors/:authorid", handlers.UpdateAuthor)
+	router.DELETE("/authors/:authorid", handlers.DeleteAuthor)
+	
+	router.GET("/books", handlers.GetBooks)
+	router.POST("/books", handlers.CreateBook)
+	router.PUT("/books/:bookid", handlers.UpdateBook)
+	router.DELETE("/books/:bookid", handlers.DeleteBook)
 
 	router.Run(":8080")
 }
